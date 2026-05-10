@@ -1,23 +1,24 @@
 import { createClient } from "@supabase/supabase-js";
+import { UUID } from "crypto";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!supabaseUrl || !supabasePublishableKey) {
   throw new Error(
-    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables."
+    "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY environment variables."
   );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabasePublishableKey);
 
 // Matches the shape of rows in your `detections` table.
 // Adjust field names to match your actual column names.
 export type Detection = {
-  id: number;
-  created_at: string;       // Supabase default timestamp column
-  direction: string | null; // e.g. "northbound" / "southbound"
-  // Add any extra columns your Pi inserts here, e.g.:
+  id: UUID;
+  created_at: string;       // use supabase generated timestamp
+  label: string | null; // train_close, train_faraway, train_interference
+  score: number | null; // Add any extra columns your Pi inserts here, e.g.:
   // confidence: number | null;
   // camera_id: string | null;
 };

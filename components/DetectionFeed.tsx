@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Detection } from "@/lib/supabase";
+import { UUID } from "crypto";
 
 const POLL_INTERVAL_MS = 10_000; // 10 seconds — tweak as needed
 
@@ -20,28 +21,13 @@ function formatDate(iso: string) {
   });
 }
 
-function DirectionBadge({ direction }: { direction: string | null }) {
-  const d = direction?.toLowerCase() ?? "";
-  const isNorth = d.includes("north") || d === "n" || d === "up";
-  const isSouth = d.includes("south") || d === "s" || d === "down";
-
-  return (
-    <span
-      className={`direction-badge ${isNorth ? "north" : isSouth ? "south" : "unknown"}`}
-    >
-      {isNorth ? "↑" : isSouth ? "↓" : "→"}{" "}
-      {direction ?? "unknown"}
-    </span>
-  );
-}
-
 export default function DetectionFeed() {
   const [detections, setDetections] = useState<Detection[]>([]);
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [newIds, setNewIds] = useState<Set<number>>(new Set());
-  const prevIdsRef = useRef<Set<number>>(new Set());
+  const [newIds, setNewIds] = useState<Set<UUID>>(new Set());
+  const prevIdsRef = useRef<Set<UUID>>(new Set());
 
   async function fetchDetections() {
     try {
@@ -138,7 +124,7 @@ export default function DetectionFeed() {
                 <th>#</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Direction</th>
+                <th>Detection Type</th>
               </tr>
             </thead>
             <tbody>
@@ -150,9 +136,7 @@ export default function DetectionFeed() {
                   <td className="col-index">{i + 1}</td>
                   <td className="col-date">{formatDate(d.created_at)}</td>
                   <td className="col-time">{formatTime(d.created_at)}</td>
-                  <td>
-                    <DirectionBadge direction={d.direction} />
-                  </td>
+                  <td>{d.label}</td>                  
                 </tr>
               ))}
             </tbody>

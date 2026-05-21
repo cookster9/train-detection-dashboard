@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Detection } from "@/lib/supabase";
 import { UUID } from "crypto";
+import TrainDetectionBanner from "./TrainDetectionBanner";
 
 const POLL_INTERVAL_MS = 10_000; // 10 seconds — tweak as needed
 
@@ -28,6 +29,7 @@ export default function DetectionFeed() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newIds, setNewIds] = useState<Set<UUID>>(new Set());
   const prevIdsRef = useRef<Set<UUID>>(new Set());
+  const [lastDetectionTime, setLastDetectionTime] = useState<Date | null>(null);
 
   async function fetchDetections() {
     try {
@@ -45,7 +47,7 @@ export default function DetectionFeed() {
       );
 
       if (fresh.size > 0) {
-        setNewIds(fresh);
+        setNewIds(fresh);        
         setTimeout(() => setNewIds(new Set()), 2000); // fade out highlight
       }
 
@@ -53,6 +55,11 @@ export default function DetectionFeed() {
       setDetections(incoming);
       setStatus("ok");
       setLastUpdated(new Date());
+      
+      // Set banner time to the most recent detection (top row)
+      if (incoming.length > 0) {
+        setLastDetectionTime(new Date(incoming[0].created_at));
+      }
     } catch (e: unknown) {
       setStatus("error");
       setErrorMsg(e instanceof Error ? e.message : "Unknown error");
@@ -73,6 +80,7 @@ export default function DetectionFeed() {
   return (
     <div className="feed-container">
       {/* Stats bar */}
+      <TrainDetectionBanner  lastDetectionTime={lastDetectionTime} showDuration={60000} />
       <div className="stats-bar">
         <div className="stat">
           <span className="stat-value">{detections.length}</span>

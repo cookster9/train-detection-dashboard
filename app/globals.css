@@ -303,3 +303,50 @@ td {
   letter-spacing: 0.08em;
   text-align: right;
 }
+
+.train-banner {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-emoji {
+  font-size: 40px;
+  animation: bounce 1s infinite;
+}
+
+.banner-text h2 {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+}
+
+.banner-text p {
+  margin: 4px 0 0 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}

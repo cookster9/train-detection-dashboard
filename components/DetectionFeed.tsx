@@ -29,8 +29,8 @@ export default function DetectionFeed() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newIds, setNewIds] = useState<Set<UUID>>(new Set());
   const prevIdsRef = useRef<Set<UUID>>(new Set());
-  const [lastDetectionTime, setLastDetectionTime] = useState<Date | null>(null);
-
+  const [lastCloseTime, setLastCloseTime] = useState<Date | null>(null);
+  const [lastFarawayTime, setLastFarawayTime] = useState<Date | null>(null);
   async function fetchDetections() {
     try {
       const res = await fetch("/api/detections?limit=50");
@@ -56,10 +56,10 @@ export default function DetectionFeed() {
       setStatus("ok");
       setLastUpdated(new Date());
       
-      // Set banner time to the most recent detection (top row)
-      if (incoming.length > 0) {
-        setLastDetectionTime(new Date(incoming[0].created_at));
-      }
+      const lastClose = incoming.find((d) => d.label === "train_close");
+      const lastFaraway = incoming.find((d) => d.label === "train_faraway");
+      if (lastClose) setLastCloseTime(new Date(lastClose.created_at));
+      if (lastFaraway) setLastFarawayTime(new Date(lastFaraway.created_at));
     } catch (e: unknown) {
       setStatus("error");
       setErrorMsg(e instanceof Error ? e.message : "Unknown error");
@@ -80,7 +80,10 @@ export default function DetectionFeed() {
   return (
     <div className="feed-container">
       {/* Stats bar */}
-      <TrainDetectionBanner  lastDetectionTime={lastDetectionTime} showDuration={60000} />
+      <TrainDetectionBanner
+        lastCloseTime={lastCloseTime}
+        lastFarawayTime={lastFarawayTime}
+      />
       <div className="stats-bar">
         <div className="stat">
           <span className="stat-value">{detections.length}</span>

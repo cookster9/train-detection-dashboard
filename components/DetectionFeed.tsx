@@ -82,7 +82,7 @@ export default function DetectionFeed() {
       {/* Stats bar */}
       <TrainDetectionBanner
         lastCloseTime={lastCloseTime}
-        lastFarawayTime={lastFarawayTime}
+        showDuration={5 * 60 * 1000}
       />
       <div className="stats-bar">
         <div className="stat">

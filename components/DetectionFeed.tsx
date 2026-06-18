@@ -4,8 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import type { Detection } from "@/lib/supabase";
 import { UUID } from "crypto";
 import TrainDetectionBanner from "./TrainDetectionBanner";
+import TrainStoppingBanner from "./TrainStoppingBanner";
+import TrainFarawayBanner from "./TrainFarawayBanner";
 
 const POLL_INTERVAL_MS = 10_000; // 10 seconds — tweak as needed
+const CLOSE_SHOW_DURATION = 5 * 60 * 1000; // 5 minutes
+const FARAWAY_SHOW_DURATION = 30 * 1000; // 30 seconds
+const STOPPING_SHOW_DURATION = 30 * 60 * 1000; // 30 minutes
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString("en-US", {
@@ -31,6 +36,8 @@ export default function DetectionFeed() {
   const prevIdsRef = useRef<Set<UUID>>(new Set());
   const [lastCloseTime, setLastCloseTime] = useState<Date | null>(null);
   const [lastFarawayTime, setLastFarawayTime] = useState<Date | null>(null);
+  const [lastStoppingTime, setLastStoppingTime] = useState<Date | null>(null);
+
   async function fetchDetections() {
     try {
       const res = await fetch("/api/detections?limit=50");
@@ -58,8 +65,11 @@ export default function DetectionFeed() {
       
       const lastClose = incoming.find((d) => d.label === "train_close");
       const lastFaraway = incoming.find((d) => d.label === "train_faraway");
+      const lastStopping = incoming.find((d) => d.label === "train_stopping");
+
       if (lastClose) setLastCloseTime(new Date(lastClose.created_at));
       if (lastFaraway) setLastFarawayTime(new Date(lastFaraway.created_at));
+      if (lastStopping) setLastStoppingTime(new Date(lastStopping.created_at));
     } catch (e: unknown) {
       setStatus("error");
       setErrorMsg(e instanceof Error ? e.message : "Unknown error");
@@ -77,13 +87,29 @@ export default function DetectionFeed() {
     return new Date(d.created_at).toDateString() === today;
   }).length;
 
+  const isCloseActive =
+    !!lastCloseTime &&
+    Date.now() - lastCloseTime.getTime() < CLOSE_SHOW_DURATION;
+
   return (
     <div className="feed-container">
       {/* Stats bar */}
       <TrainDetectionBanner
         lastCloseTime={lastCloseTime}
-        showDuration={5 * 60 * 1000}
+        showDuration={CLOSE_SHOW_DURATION}
       />
+
+      <TrainStoppingBanner
+        lastStoppingTime={lastStoppingTime}
+        showDuration={STOPPING_SHOW_DURATION}
+      />
+
+      <TrainFarawayBanner
+        lastFarawayTime={lastFarawayTime}
+        showDuration={FARAWAY_SHOW_DURATION}
+        suppressed={isCloseActive}
+      />
+
       <div className="stats-bar">
         <div className="stat">
           <span className="stat-value">{detections.length}</span>

@@ -1,5 +1,6 @@
 import DetectionFeed from "@/components/DetectionFeed";
 import CrossingHeatMap from "@/components/CrossingHeatMap";
+import TrainLikelihoodBanner from "@/components/TrainLikelihoodBanner"
 
 export default function Home() {
   return (
@@ -14,6 +15,10 @@ export default function Home() {
       </header>
 
       <section className="dashboard-grid">
+        <div>
+          <h2>Likelihood of Imminent Crossing based on historical data</h2>          
+          <TrainLikelihoodBanner />
+        </div>
         <div className="feed-panel">
           <h2>Recent detections</h2>
           <DetectionFeed />

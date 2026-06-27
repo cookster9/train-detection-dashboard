@@ -3,6 +3,12 @@ import { supabase } from "@/lib/supabase";
 
 type Likelihood = "low" | "medium" | "high" | "unknown";
 
+type LikelihoodRow = {
+  hour_ct: number;
+  bucket_15min: number;
+  count: number;
+};
+
 export async function GET() {
   try {
     const now = new Date();
@@ -18,11 +24,7 @@ export async function GET() {
       throw error;
     }
 
-    const rows = (results ?? []) as Array<{
-      hour_ct: number;
-      bucket_15min: number;
-      count: number;
-    }[]>;
+    const rows = (results ?? []) as LikelihoodRow[];
 
     if (rows.length === 0) {
       return NextResponse.json({

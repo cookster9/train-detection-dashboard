@@ -350,3 +350,44 @@ td {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
 }
+
+/* heatmap */
+.heatmap {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.heatmap-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.heatmap-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.heatmap-day {
+  width: 3rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.heatmap-cell {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.heatmap-note {
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}

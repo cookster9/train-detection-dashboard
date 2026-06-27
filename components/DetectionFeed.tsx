@@ -40,7 +40,7 @@ export default function DetectionFeed() {
 
   async function fetchDetections() {
     try {
-      const res = await fetch("/api/detections?limit=50");
+      const res = await fetch("/api/detections?limit=20");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
 

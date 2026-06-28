@@ -9,7 +9,7 @@
   --text: #e8e8e8;
   --text-muted: #666;
   --text-dim: #444;
-  --accent: #f5c842;       /* railway yellow */
+  --accent: #f5c842;
   --accent-dim: #3a3000;
   --north: #4db8ff;
   --north-bg: #001f33;
@@ -40,6 +40,7 @@ body {
   max-width: 720px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
+  overflow-x: hidden;
 }
 
 /* ── Header ─────────────────────────────────────────────── */
@@ -287,7 +288,7 @@ td {
   to { transform: rotate(360deg); }
 }
 
-/* ── Feed container ─────────────────────────────────────── */
+/* ── Feed container ─────────────────────────────────────────── */
 
 .feed-container {
   display: flex;
@@ -357,17 +358,24 @@ td {
   border: 1px solid var(--border);
   border-radius: 4px;
   background: var(--surface);
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .heatmap-grid {
   display: grid;
   gap: 0.5rem;
+  min-width: max-content;
 }
 
 .heatmap-row {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  width: max-content;
 }
 
 .heatmap-day {
@@ -390,4 +398,20 @@ td {
   margin-top: 0.85rem;
   font-size: 0.78rem;
   color: var(--text-dim);
+}
+
+@media (max-width: 640px) {
+  .heatmap {
+    padding: 0.75rem;
+  }
+
+  .heatmap-day {
+    width: 2.5rem;
+    font-size: 0.7rem;
+  }
+
+  .heatmap-cell {
+    width: 12px;
+    height: 12px;
+  }
 }

@@ -4,9 +4,17 @@ import { useEffect, useState } from "react";
 
 type Likelihood = "low" | "medium" | "high" | "unknown";
 
-export default function TrainLikelihoodBanner() {
+interface TrainFarawayBannerProps {
+  suppressed?: boolean;
+}
+
+export default function TrainLikelihoodBanner({suppressed = false }: TrainFarawayBannerProps) {
   const [likelihood, setLikelihood] = useState<Likelihood>("unknown");
   const [loading, setLoading] = useState(true);
+  
+  if (suppressed) {
+    return null;
+  }
 
   useEffect(() => {
     async function load() {
@@ -58,6 +66,7 @@ export default function TrainLikelihoodBanner() {
         gap: "0.5rem",
       }}
     >
+      <h2>Likelihood of Imminent Crossing based on historical data</h2>
       <span>{loading ? "⏳" : color.icon}</span>
       <span>{loading ? "Checking likelihood…" : labels[likelihood]}</span>
     </div>

@@ -6,6 +6,7 @@ import { UUID } from "crypto";
 import TrainDetectionBanner from "./TrainDetectionBanner";
 import TrainStoppingBanner from "./TrainStoppingBanner";
 import TrainFarawayBanner from "./TrainFarawayBanner";
+import TrainLikelihoodBanner from "./TrainLikelihoodBanner";
 
 const POLL_INTERVAL_MS = 10_000; // 10 seconds — tweak as needed
 const CLOSE_SHOW_DURATION = 5 * 60 * 1000; // 5 minutes
@@ -109,6 +110,8 @@ export default function DetectionFeed() {
         showDuration={FARAWAY_SHOW_DURATION}
         suppressed={isCloseActive}
       />
+
+      <TrainLikelihoodBanner suppressed={isCloseActive} />
 
       <div className="stats-bar">
         <div className="stat">

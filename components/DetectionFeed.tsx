@@ -111,7 +111,9 @@ export default function DetectionFeed() {
         suppressed={isCloseActive}
       />
 
-      <TrainLikelihoodBanner suppressed={isCloseActive} />
+      {!isCloseActive ? (<TrainLikelihoodBanner />) : null}   
+
+      <h2>Recent detections</h2>
 
       <div className="stats-bar">
         <div className="stat">

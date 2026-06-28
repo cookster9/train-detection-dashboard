@@ -4,17 +4,9 @@ import { useEffect, useState } from "react";
 
 type Likelihood = "low" | "medium" | "high" | "unknown";
 
-interface TrainFarawayBannerProps {
-  suppressed?: boolean;
-}
-
-export default function TrainLikelihoodBanner({suppressed = false }: TrainFarawayBannerProps) {
+export default function TrainLikelihoodBanner() {
   const [likelihood, setLikelihood] = useState<Likelihood>("unknown");
-  const [loading, setLoading] = useState(true);
-  
-  if (suppressed) {
-    return null;
-  }
+  const [loading, setLoading] = useState(true);  
 
   useEffect(() => {
     async function load() {
@@ -53,6 +45,8 @@ export default function TrainLikelihoodBanner({suppressed = false }: TrainFarawa
   const color = colors[likelihood];
 
   return (
+    <>
+    <h2>Likelihood of Imminent Crossing based on historical data</h2>
     <div
       style={{
         background: color.bg,
@@ -66,9 +60,9 @@ export default function TrainLikelihoodBanner({suppressed = false }: TrainFarawa
         gap: "0.5rem",
       }}
     >
-      <h2>Likelihood of Imminent Crossing based on historical data</h2>
       <span>{loading ? "⏳" : color.icon}</span>
       <span>{loading ? "Checking likelihood…" : labels[likelihood]}</span>
     </div>
+    </>
   );
 }

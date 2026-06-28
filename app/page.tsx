@@ -15,8 +15,7 @@ export default function Home() {
       </header>
 
       <section className="dashboard-grid">        
-        <div className="feed-panel">
-          <h2>Recent detections</h2>
+        <div className="feed-panel">          
           <DetectionFeed />
         </div>
 

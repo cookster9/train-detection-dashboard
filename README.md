@@ -56,43 +56,6 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000).
 
----
-
-## Supabase: enable Row Level Security (recommended)
-
-If RLS is on (it should be for production), add a policy to allow public reads:
-
-```sql
--- In the Supabase SQL editor:
-create policy "Allow public read"
-  on detections
-  for select
-  using (true);
-```
-
----
-
-## Deploy to Vercel
-
-### Option A — CLI
-
-```bash
-npm i -g vercel
-vercel
-```
-
-### Option B — GitHub
-
-1. Push this repo to GitHub.
-2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import the repo.
-3. In the Vercel project settings, add your environment variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-4. Deploy.
-
-Vercel auto-deploys on every push to `main`.
-
----
 
 ## Changing the poll interval
 
@@ -103,10 +66,3 @@ const POLL_INTERVAL_MS = 10_000; // 10 seconds
 ```
 
 ---
-
-## Future ideas
-
-- Switch to **Supabase Realtime** for instant push updates instead of polling.
-- Add a chart of detections per hour/day using Recharts.
-- Add direction filters (northbound / southbound toggle).
-- Show a "trains per day" sparkline in the header.

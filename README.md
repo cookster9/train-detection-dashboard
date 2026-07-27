@@ -2,7 +2,7 @@
 
 Next.js dashboard that polls a Supabase `detections` table and displays live train detection events logged by a Raspberry Pi.
 
-How is this detections table populated? See https://github.com/cookster9/train_detector
+How is this `detections` table populated? See https://github.com/cookster9/train_detector
 
 ---
 

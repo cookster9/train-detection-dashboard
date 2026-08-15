@@ -1,40 +1,40 @@
-"use client";
+import type { Detection } from "@/lib/supabase";
 
-import { useEffect, useState } from "react";
-
-interface TrainStoppingBannerProps {
-  lastStoppingTime: Date | null;
+type Props = {
+  stoppingEvents: Detection[];
   showDuration: number;
+};
+
+function formatTime(iso?: string) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
-export default function TrainStoppingBanner({ lastStoppingTime, showDuration }: TrainStoppingBannerProps) {
-  const [isVisible, setIsVisible] = useState(false);
+export default function TrainStoppingBanner({ stoppingEvents, showDuration }: Props) {
+  const count = stoppingEvents.length;
+  if (count === 0) {
+    return (
+      <div className="banner stopping-banner stopping-none">
+        <strong>No recent stopping events</strong>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if (!lastStoppingTime) { setIsVisible(false); return; }
+  // assume detections include a numeric `score` field for squeal loudness
+  const maxScore = stoppingEvents.reduce((m, e) => {
+    const s = typeof (e as any).score === "number" ? (e as any).score : 0;
+    return Math.max(m, s);
+  }, 0);
 
-    const now = Date.now();
-    const elapsed = now - lastStoppingTime.getTime();
-
-    if (elapsed < showDuration) {
-      setIsVisible(true);
-      const timeout = setTimeout(() => setIsVisible(false), showDuration - elapsed);
-      return () => clearTimeout(timeout);
-    } else {
-      setIsVisible(false);
-    }
-  }, [lastStoppingTime, showDuration]);
-
-  if (!isVisible) return null;
+  const last = stoppingEvents[0];
 
   return (
-    <div className="train-banner banner-stopping">
-      <div className="banner-content">
-        <span className="banner-emoji">⚠️</span>
-        <div className="banner-text">
-          <h3>Stopping noises detected</h3>
-          <p>Wheels squealing detected on the last crossing — the train may have been stopping. This note will remain for 30 minutes.</p>
-        </div>
+    <div className="banner stopping-banner">
+      <div className="banner-title">Stopping events</div>
+      <div className="banner-body">
+        <div>{count} in last {Math.round(showDuration / 1000)}s</div>
+        <div>Max squeal score: {Math.round(maxScore * 100) / 100}</div>
+        <div>Last: {formatTime(last?.created_at)}</div>
       </div>
     </div>
   );

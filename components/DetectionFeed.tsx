@@ -88,6 +88,11 @@ export default function DetectionFeed() {
     return new Date(d.created_at).toDateString() === today;
   }).length;
 
+  const stoppingEvents = detections
+    .filter((d) => d.label === "train_stopping")
+    .filter((d) => Date.now() - new Date(d.created_at).getTime() < STOPPING_SHOW_DURATION)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
   const isCloseActive =
     !!lastCloseTime &&
     Date.now() - lastCloseTime.getTime() < CLOSE_SHOW_DURATION;
@@ -101,7 +106,7 @@ export default function DetectionFeed() {
       />
 
       <TrainStoppingBanner
-        lastStoppingTime={lastStoppingTime}
+        stoppingEvents={stoppingEvents}
         showDuration={STOPPING_SHOW_DURATION}
       />
 
@@ -170,7 +175,7 @@ export default function DetectionFeed() {
               </tr>
             </thead>
             <tbody>
-              {detections.map((d, i) => (
+              {detections.filter((d) => d.label !== "train_stopping").map((d, i) => (
                 <tr
                   key={d.id}
                   className={newIds.has(d.id) ? "row-new" : ""}

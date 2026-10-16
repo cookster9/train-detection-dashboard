@@ -30,6 +30,7 @@ function formatDate(iso: string) {
 
 export default function DetectionFeed() {
   const [detections, setDetections] = useState<Detection[]>([]);
+  const [todayCount, setTodayCount] = useState(0);
   const [status, setStatus] = useState<"loading" | "ok" | "error">("loading");
   const [errorMsg, setErrorMsg] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -46,6 +47,13 @@ export default function DetectionFeed() {
       const json = await res.json();
 
       const incoming: Detection[] = json.detections ?? [];
+      if (
+        typeof json.todayCount !== "number" ||
+        !Number.isSafeInteger(json.todayCount) ||
+        json.todayCount < 0
+      ) {
+        throw new Error("Invalid today count response");
+      }
 
       // Figure out which IDs are brand new since last fetch
       const fresh = new Set(
@@ -61,6 +69,7 @@ export default function DetectionFeed() {
 
       prevIdsRef.current = new Set(incoming.map((d) => d.id));
       setDetections(incoming);
+      setTodayCount(json.todayCount);
       setStatus("ok");
       setLastUpdated(new Date());
       
@@ -82,11 +91,6 @@ export default function DetectionFeed() {
     const interval = setInterval(fetchDetections, POLL_INTERVAL_MS);
     return () => clearInterval(interval);
   }, []);
-
-  const todayCount = detections.filter((d) => {
-    const today = new Date().toDateString();
-    return new Date(d.created_at).toDateString() === today;
-  }).length;
 
   const stoppingEvents = detections
     .filter((d) => d.label === "train_stopping")

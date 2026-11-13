@@ -117,6 +117,87 @@ body {
   border-top: 1px solid var(--border);
 }
 
+/* ── Crossing location ───────────────────────────────────── */
+
+.crossing-location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-bright);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse at top left, #f5c8420d, transparent 65%),
+    var(--surface);
+}
+
+.crossing-location-eyebrow {
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.crossing-location h2 {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.crossing-location-city {
+  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.crossing-location-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.crossing-id {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.crossing-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.crossing-map-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.crossing-map-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
 /* ── Stats bar ───────────────────────────────────────────── */
 
 .stats-bar {
@@ -437,6 +518,18 @@ td {
 }
 
 @media (max-width: 640px) {
+  .crossing-location {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .crossing-location-details {
+    justify-content: flex-start;
+    gap: 0.75rem;
+  }
+
   .heatmap {
     padding: 0.75rem;
   }

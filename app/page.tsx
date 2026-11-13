@@ -1,8 +1,17 @@
 import DetectionFeed from "@/components/DetectionFeed";
 import CrossingHeatMap from "@/components/CrossingHeatMap";
-import TrainLikelihoodBanner from "@/components/TrainLikelihoodBanner"
+import CrossingLocationPanel from "@/components/CrossingLocationPanel";
+import { getCrossing } from "@/lib/crossing";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const { crossing, error } = await getCrossing();
+
+  if (error) {
+    console.error("Failed to load crossing location:", error);
+  }
+
   return (
     <main className="page">
       <header className="header">
@@ -14,8 +23,10 @@ export default function Home() {
         <hr className="header-rule" />
       </header>
 
-      <section className="dashboard-grid">        
-        <div className="feed-panel">          
+      <CrossingLocationPanel crossing={crossing} error={error} />
+
+      <section className="dashboard-grid">
+        <div className="feed-panel">
           <DetectionFeed />
         </div>
 
